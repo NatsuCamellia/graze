@@ -2,9 +2,8 @@ package net.natsucamellia.graze.world.entity.ai.goal;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
@@ -12,14 +11,19 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class GrazeGoal extends MoveToBlockGoal {
-    private final Mob mob;
+    private final Animal mob;
 
     @Override
     public double acceptedDistance() {
         return 2.0d;
     }
 
-    public GrazeGoal(PathfinderMob mob, double speedModifier, int searchRange) {
+    @Override
+    public boolean canUse() {
+        return super.canUse() && this.mob.canFallInLove() && !this.mob.isBaby();
+    }
+
+    public GrazeGoal(Animal mob, double speedModifier, int searchRange) {
         super(mob, speedModifier, searchRange, 4);
         this.mob = mob;
     }
@@ -59,6 +63,9 @@ public class GrazeGoal extends MoveToBlockGoal {
             // reset crop age to simulate re-plant
             BlockState newState = state.setValue(CropBlock.AGE, 0);
             level.setBlockAndUpdate(cropPos, newState);
+
+            // fall in love
+            this.mob.setInLove(null);
 
             this.mob.playSound(SoundEvents.CROP_BREAK, 1.0F, 1.0F);
         }
