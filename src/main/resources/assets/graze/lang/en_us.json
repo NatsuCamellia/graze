@@ -1,0 +1,13 @@
+{
+  "itemGroup.graze": "Example Mod Tab",
+  "block.graze.example_block": "Example Block",
+  "item.graze.example_item": "Example Item",
+
+  "graze.configuration.title": "Graze Configs",
+  "graze.configuration.section.graze.common.toml": "Graze Configs",
+  "graze.configuration.section.graze.common.toml.title": "Graze Configs",
+  "graze.configuration.items": "Item List",
+  "graze.configuration.logDirtBlock": "Log Dirt Block",
+  "graze.configuration.magicNumberIntroduction": "Magic Number Text",
+  "graze.configuration.magicNumber": "Magic Number"
+}
