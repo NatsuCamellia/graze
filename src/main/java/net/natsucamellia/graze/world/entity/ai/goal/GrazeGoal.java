@@ -45,12 +45,22 @@ public class GrazeGoal extends MoveToBlockGoal {
                     (float) this.mob.getMaxHeadXRot()
             );
             if (this.isReachedTarget()) {
-                BlockPos cropPos = this.blockPos;
-                level.destroyBlock(cropPos, false);
-                this.mob.playSound(SoundEvents.CROP_BREAK, 1.0F, 1.0F);
-
+                onReachedTarget();
                 this.stop();
             }
+        }
+    }
+
+    private void onReachedTarget() {
+        Level level = this.mob.level();
+        BlockPos cropPos = this.blockPos;
+        BlockState state = level.getBlockState(cropPos);
+        if (state.getBlock() instanceof CropBlock) {
+            // reset crop age to simulate re-plant
+            BlockState newState = state.setValue(CropBlock.AGE, 0);
+            level.setBlockAndUpdate(cropPos, newState);
+
+            this.mob.playSound(SoundEvents.CROP_BREAK, 1.0F, 1.0F);
         }
     }
 }
