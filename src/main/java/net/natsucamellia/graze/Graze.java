@@ -1,6 +1,12 @@
 package net.natsucamellia.graze;
 
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.level.block.CarrotBlock;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.natsucamellia.graze.world.entity.ai.goal.GrazeGoal;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import org.slf4j.Logger;
@@ -114,13 +120,32 @@ public class Graze {
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
+        LOGGER.info("[Graze] Mod loaded");
     }
 
     @SubscribeEvent
     public void onEntityJoin(EntityJoinLevelEvent event) {
-        if (!event.getLevel().isClientSide() && event.getEntity() instanceof Cow cow) {
-            cow.goalSelector.addGoal(3, new GrazeGoal(cow, 1.2d, 8));
+        if (!event.getLevel().isClientSide() && event.getEntity() instanceof Animal animal) {
+            switch (animal) {
+                case Cow cow:
+                    cow.goalSelector.addGoal(3, new GrazeGoal(cow, this::isMatureWheat, 8));
+                    break;
+                case Sheep sheep:
+                    sheep.goalSelector.addGoal(3, new GrazeGoal(sheep, this::isMatureWheat, 8));
+                    break;
+                case Pig pig:
+                    pig.goalSelector.addGoal(3, new GrazeGoal(pig, this::isMatureCarrots, 8));
+                default:
+                    break;
+            }
         }
+    }
+
+    private boolean isMatureWheat(BlockState state) {
+        return state.is(Blocks.WHEAT) && state.getValue(CropBlock.AGE) == CropBlock.MAX_AGE;
+    }
+
+    private boolean isMatureCarrots(BlockState state) {
+        return state.is(Blocks.CARROTS) && state.getValue(CropBlock.AGE) == CarrotBlock.MAX_AGE;
     }
 }
