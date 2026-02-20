@@ -2,6 +2,9 @@
 
 **Let your livestock find their own food and reproduce naturally.**
 
+![NeoForge](https://img.shields.io/badge/NeoForge-1.21.1-orange)
+![License](https://img.shields.io/badge/License-MIT-blue)
+
 ## Introduction
 
 Graze allows farm animals to actively seek out and eat nearby mature crops, automatically entering breeding mode once fed — no need to hand-feed them yourself.
