@@ -12,7 +12,7 @@ public class Config {
             .defineInRange("searchRadius", 8, 1, Integer.MAX_VALUE);
     public static final ModConfigSpec.IntValue CAP_MULTIPLIER = BUILDER
             .translation("graze.configuration.capMultiplier")
-            .defineInRange("capMultiplier", 3, 1, Integer.MAX_VALUE);
+            .defineInRange("capMultiplier", 6, 1, Integer.MAX_VALUE);
 
     static final ModConfigSpec SPEC = BUILDER.build();
 }
