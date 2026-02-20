@@ -1,17 +1,21 @@
 package net.natsucamellia.graze.world.entity.ai.goal;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
+import net.natsucamellia.graze.Config;
 
 import java.util.function.Predicate;
 
 public class GrazeGoal extends MoveToBlockGoal {
     private final Animal mob;
     private final Predicate<BlockState> foodPredicate;
+    private static final int capMultiplier = Config.CAP_MULTIPLIER.getAsInt();
 
     @Override
     public double acceptedDistance() {
@@ -21,11 +25,26 @@ public class GrazeGoal extends MoveToBlockGoal {
     @Override
     public boolean canUse() {
         // can breed and can fall in love
-        return super.canUse() && this.mob.getAge() == 0 && this.mob.canFallInLove();
+        if (!super.canUse() || this.mob.getAge() != 0 || !this.mob.canFallInLove()) return false;
+
+        // check if the number of animals is below the cap
+        if (this.mob.level() instanceof ServerLevel serverLevel) {
+            var spawnState = serverLevel.getChunkSource().getLastSpawnState();
+            if (spawnState == null) return false;
+
+            MobCategory category = this.mob.getType().getCategory();
+            int current = spawnState.getMobCategoryCounts().getInt(category);
+            int minecraftCap = category.getMaxInstancesPerChunk() * spawnState.getSpawnableChunkCount() / 289;
+            long cap = (long) capMultiplier * minecraftCap;
+
+            return current < cap;
+        }
+
+        return false;
     }
 
-    public GrazeGoal(Animal mob, Predicate<BlockState> foodPredicate, int searchRange) {
-        super(mob, 1.2d, searchRange, 4);
+    public GrazeGoal(Animal mob, Predicate<BlockState> foodPredicate) {
+        super(mob, 1.2d, Config.SEARCH_RADIUS.getAsInt(), 4);
         this.mob = mob;
         this.foodPredicate = foodPredicate;
     }

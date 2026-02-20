@@ -8,8 +8,11 @@ public class Config {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
     public static final ModConfigSpec.IntValue SEARCH_RADIUS = BUILDER
-            .comment("The radius in blocks to search for food")
+            .translation("graze.configuration.searchRadius")
             .defineInRange("searchRadius", 8, 1, Integer.MAX_VALUE);
+    public static final ModConfigSpec.IntValue CAP_MULTIPLIER = BUILDER
+            .translation("graze.configuration.capMultiplier")
+            .defineInRange("capMultiplier", 3, 1, Integer.MAX_VALUE);
 
     static final ModConfigSpec SPEC = BUILDER.build();
 }

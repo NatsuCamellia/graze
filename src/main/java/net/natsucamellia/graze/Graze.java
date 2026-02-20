@@ -55,13 +55,13 @@ public class Graze {
         if (!event.getLevel().isClientSide() && event.getEntity() instanceof Animal animal) {
             switch (animal) {
                 case Cow cow:
-                    cow.goalSelector.addGoal(3, new GrazeGoal(cow, this::isMatureWheat, Config.SEARCH_RADIUS.getAsInt()));
+                    cow.goalSelector.addGoal(3, new GrazeGoal(cow, this::isMatureWheat));
                     break;
                 case Sheep sheep:
-                    sheep.goalSelector.addGoal(3, new GrazeGoal(sheep, this::isMatureWheat, Config.SEARCH_RADIUS.getAsInt()));
+                    sheep.goalSelector.addGoal(3, new GrazeGoal(sheep, this::isMatureWheat));
                     break;
                 case Pig pig:
-                    pig.goalSelector.addGoal(3, new GrazeGoal(pig, this::isMatureCarrots, Config.SEARCH_RADIUS.getAsInt()));
+                    pig.goalSelector.addGoal(3, new GrazeGoal(pig, this::isMatureCarrots));
                 default:
                     break;
             }

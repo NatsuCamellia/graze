@@ -2,5 +2,8 @@
   "graze.configuration.title": "Graze Configs",
   "graze.configuration.section.graze.common.toml": "Graze Configs",
   "graze.configuration.section.graze.common.toml.title": "Graze Configs",
-  "graze.configuration.searchRadius": "Search Radius"
+  "graze.configuration.searchRadius": "Search Radius",
+  "graze.configuration.searchRadius.tooltip": "The radius in blocks to search for food",
+  "graze.configuration.capMultiplier": "Animal Amount Limit Multiplier",
+  "graze.configuration.capMultiplier.tooltip": "The multiplier for the amount of animals that can be spawned"
 }
