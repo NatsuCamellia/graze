@@ -2,11 +2,13 @@ package net.natsucamellia.graze.world.entity.ai.goal;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.natsucamellia.graze.Config;
 
@@ -89,7 +91,12 @@ public class GrazeGoal extends MoveToBlockGoal {
                 // eat animation
                 this.eatAnimationTick = Math.max(0, this.eatAnimationTick - 1);
                 if (this.eatAnimationTick == this.adjustedTickDelay(4)) {
-                    level.destroyBlock(this.blockPos, false, this.mob);
+                    if (level.getBlockState(this.blockPos).getBlock() instanceof CropBlock cropBlock) {
+                        // reset age to 0
+                        level.setBlockAndUpdate(this.blockPos, cropBlock.getStateForAge(0));
+                    } else {
+                        level.destroyBlock(this.blockPos, false, this.mob);
+                    }
                     this.mob.setInLove(null);
                     this.stop();
                 }
