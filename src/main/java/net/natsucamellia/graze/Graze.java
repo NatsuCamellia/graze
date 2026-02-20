@@ -1,9 +1,7 @@
 package net.natsucamellia.graze;
 
 import net.minecraft.world.entity.animal.*;
-import net.minecraft.world.level.block.BeetrootBlock;
-import net.minecraft.world.level.block.CarrotBlock;
-import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.natsucamellia.graze.world.entity.ai.goal.GrazeGoal;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
@@ -11,7 +9,6 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
-import net.minecraft.world.level.block.Blocks;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -59,7 +56,7 @@ public class Graze {
                     sheep.goalSelector.addGoal(3, new GrazeGoal(sheep, this::isMatureWheat));
                     break;
                 case Pig pig:
-                    pig.goalSelector.addGoal(3, new GrazeGoal(pig, this::isMatureCarrots));
+                    pig.goalSelector.addGoal(3, new GrazeGoal(pig, this::isPigFood));
                     break;
                 case Chicken chicken:
                     chicken.goalSelector.addGoal(3, new GrazeGoal(chicken, this::isChickenFood));
@@ -78,8 +75,16 @@ public class Graze {
         return state.is(Blocks.CARROTS) && state.getValue(CarrotBlock.AGE) == CarrotBlock.MAX_AGE;
     }
 
+    private boolean isMaturePotatoes(BlockState state) {
+        return state.is(Blocks.POTATOES) && state.getValue(PotatoBlock.AGE) == PotatoBlock.MAX_AGE;
+    }
+
     private boolean isMatureBeetroots(BlockState state) {
         return state.is(Blocks.BEETROOTS) && state.getValue(BeetrootBlock.AGE) == BeetrootBlock.MAX_AGE;
+    }
+
+    private boolean isPigFood(BlockState state) {
+        return isMatureCarrots(state) || isMaturePotatoes(state) || isMatureBeetroots(state);
     }
 
     private boolean isChickenFood(BlockState state) {
