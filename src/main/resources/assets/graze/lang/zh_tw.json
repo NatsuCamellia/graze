@@ -1,0 +1,11 @@
+{
+  "fml.menu.mods.info.description.graze": "讓你養的動物自己尋找食物並自然繁殖。",
+
+  "graze.configuration.title": "Graze 設定",
+  "graze.configuration.section.graze.common.toml": "Graze 設定",
+  "graze.configuration.section.graze.common.toml.title": "Graze 設定",
+  "graze.configuration.searchRadius": "搜尋半徑",
+  "graze.configuration.searchRadius.tooltip": "動物尋找食物的範圍半徑",
+  "graze.configuration.capMultiplier": "動物自主繁殖數量限制倍率",
+  "graze.configuration.capMultiplier.tooltip": "動物吃農作物以繁殖的數量上限與原版動物生成的數量上限之比值"
+}
