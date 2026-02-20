@@ -1,9 +1,7 @@
 package net.natsucamellia.graze;
 
-import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Cow;
-import net.minecraft.world.entity.animal.Pig;
-import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.level.block.BeetrootBlock;
 import net.minecraft.world.level.block.CarrotBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -62,6 +60,10 @@ public class Graze {
                     break;
                 case Pig pig:
                     pig.goalSelector.addGoal(3, new GrazeGoal(pig, this::isMatureCarrots));
+                    break;
+                case Chicken chicken:
+                    chicken.goalSelector.addGoal(3, new GrazeGoal(chicken, this::isChickenFood));
+                    break;
                 default:
                     break;
             }
@@ -73,6 +75,14 @@ public class Graze {
     }
 
     private boolean isMatureCarrots(BlockState state) {
-        return state.is(Blocks.CARROTS) && state.getValue(CropBlock.AGE) == CarrotBlock.MAX_AGE;
+        return state.is(Blocks.CARROTS) && state.getValue(CarrotBlock.AGE) == CarrotBlock.MAX_AGE;
+    }
+
+    private boolean isMatureBeetroots(BlockState state) {
+        return state.is(Blocks.BEETROOTS) && state.getValue(BeetrootBlock.AGE) == BeetrootBlock.MAX_AGE;
+    }
+
+    private boolean isChickenFood(BlockState state) {
+        return isMatureWheat(state) || isMatureBeetroots(state) || state.is(Blocks.MELON) || state.is(Blocks.PUMPKIN);
     }
 }
