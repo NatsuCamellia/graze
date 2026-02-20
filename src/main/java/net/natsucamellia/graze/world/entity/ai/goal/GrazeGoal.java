@@ -3,6 +3,7 @@ package net.natsucamellia.graze.world.entity.ai.goal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
 import net.minecraft.world.entity.animal.Animal;
@@ -94,8 +95,10 @@ public class GrazeGoal extends MoveToBlockGoal {
                     if (level.getBlockState(this.blockPos).getBlock() instanceof CropBlock cropBlock) {
                         // reset age to 0
                         level.setBlockAndUpdate(this.blockPos, cropBlock.getStateForAge(0));
+                        level.playSound(null, this.blockPos, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1.0F, 1.0F);
                     } else {
                         level.destroyBlock(this.blockPos, false, this.mob);
+                        level.playSound(null, this.blockPos, SoundEvents.CROP_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
                     }
                     this.mob.setInLove(null);
                     this.stop();
