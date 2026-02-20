@@ -16,6 +16,10 @@ public class GrazeGoal extends MoveToBlockGoal {
     private final Animal mob;
     private final Predicate<BlockState> foodPredicate;
     private static final int capMultiplier = Config.CAP_MULTIPLIER.getAsInt();
+    /**
+     * Number of ticks since the entity started to eat grass
+     */
+    private int eatAnimationTick;
 
     @Override
     public double acceptedDistance() {
@@ -41,6 +45,18 @@ public class GrazeGoal extends MoveToBlockGoal {
         }
 
         return false;
+    }
+
+    @Override
+    public void start() {
+        super.start();
+        this.eatAnimationTick = this.adjustedTickDelay(40);
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        this.eatAnimationTick = 0;
     }
 
     public GrazeGoal(Animal mob, Predicate<BlockState> foodPredicate) {
@@ -70,9 +86,13 @@ public class GrazeGoal extends MoveToBlockGoal {
                     (float) this.mob.getMaxHeadXRot()
             );
             if (this.isReachedTarget()) {
-                level.destroyBlock(this.blockPos, false, this.mob);
-                this.mob.setInLove(null);
-                this.stop();
+                // eat animation
+                this.eatAnimationTick = Math.max(0, this.eatAnimationTick - 1);
+                if (this.eatAnimationTick == this.adjustedTickDelay(4)) {
+                    level.destroyBlock(this.blockPos, false, this.mob);
+                    this.mob.setInLove(null);
+                    this.stop();
+                }
             }
         }
     }
